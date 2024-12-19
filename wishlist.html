@@ -1,0 +1,24 @@
+<?php
+require 'db_connect.php';
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $product_id = $_POST['product_id'];
+
+    // Add to cart logic (e.g., insert into a cart table)
+    $stmt = $conn->prepare("INSERT INTO cart (user_id, product_id) VALUES (?, ?)");
+    $stmt->bind_param("ii", $user_id, $product_id);
+
+    if ($stmt->execute()) {
+        echo "Product added to cart successfully!";
+        header("Location: ../html_files/cart.html"); // Redirect to the cart page (implement this as needed)
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>

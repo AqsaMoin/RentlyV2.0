@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Products</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Available Products</h2>
+        <div class="row">
+            <?php
+            require '../php-files/db_connect.php';
+
+            $stmt = $conn->prepare("SELECT id, product_name, description, price, image FROM products");
+            $stmt->execute();
+            $stmt->bind_result($id, $product_name, $description, $price, $image_path);
+
+            while ($stmt->fetch()) {
+                $image_src = "../" . htmlspecialchars($image_path);
+                echo '
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="' . $image_src . '" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">' . htmlspecialchars($product_name) . '</h5>
+                            <p class="card-text">' . htmlspecialchars($description) . '</p>
+                            <p class="card-text">$' . htmlspecialchars($price) . '</p>
+                            <form action="../php-files/add_to_cart.php" method="post" class="d-inline">
+                                <input type="hidden" name="product_id" value="' . htmlspecialchars($id) . '">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                            <form action="../php-files/buy_product.php" method="post" class="d-inline">
+                                <input type="hidden" name="product_id" value="' . htmlspecialchars($id) . '">
+                                <button type="submit" class="btn btn-success">Buy Now</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                ';
+            }
+
+            $stmt->close();
+            $conn->close();
+            ?>
+        </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

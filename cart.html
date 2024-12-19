@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Your Shopping Cart</h2>
+        <div class="row">
+            <!-- PHP code to fetch and display cart items will be here -->
+            <?php
+            session_start();
+            require '../php-files/db_connect.php';
+
+            if (isset($_SESSION['user_id'])) {
+                $user_id = $_SESSION['user_id'];
+
+                $stmt = $conn->prepare("SELECT products.id, products.product_name, products.description, products.price, products.image FROM cart JOIN products ON cart.product_id = products.id WHERE cart.user_id = ?");
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $stmt->bind_result($id, $product_name, $description, $price, $image_path);
+
+                while ($stmt->fetch()) {
+                    echo '
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="../' . htmlspecialchars($image_path) . '" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">' . htmlspecialchars($product_name) . '</h5>
+                                <p class="card-text">' . htmlspecialchars($description) . '</p>
+                                <p class="card-text">$' . htmlspecialchars($price) . '</p>
+                                <form action="../php-files/remove_from_cart.php" method="post" class="d-inline">
+                                    <input type="hidden" name="product_id" value="' . htmlspecialchars($id) . '">
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    ';
+                }
+
+                $stmt->close();
+                $conn->close();
+            } else {
+                echo '<p>You need to log in to view your cart.</p>';
+            }
+            ?>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center mt-4">
+                <a href="checkout.html" class="btn btn-success">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
