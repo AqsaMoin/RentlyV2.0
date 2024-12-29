@@ -1,3 +1,6 @@
+# Yo!
+### You guys just have to change the frontend codes in the templates folder backend is ready
+
 # Luminari
 ### Illuminating your Views
 
