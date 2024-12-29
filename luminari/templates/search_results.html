@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Search Results for "{{ query }}"</h2>
+        
+        {% if results %}
+            <ul class="list-group mt-4">
+                {% for place in results %}
+                    <li class="list-group-item">
+                        <strong>{{ place.place_title }}</strong><br>
+                        {{ place.place_desc|truncatechars:100 }}
+                        <a href="{% url 'place_detail' place.slug %}" class="btn btn-sm btn-primary mt-2">View Details</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alert alert-warning mt-4" role="alert">
+                Sorry, no data found. Would you like to <a href="{% url 'add_place' %}" class="alert-link">add a new place</a>?
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
