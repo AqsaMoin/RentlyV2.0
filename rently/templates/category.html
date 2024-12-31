@@ -1,0 +1,11 @@
+<h1>Products in {{ category }}</h1>
+<ul>
+    {% for product in products %}
+        <li>
+            <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" style="width: 150px;">
+            <h3>{{ product.product_name }}</h3>
+            <p>{{ product.product_description }}</p>
+            <p>Price: ${{ product.product_price }}</p>
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,14 @@
+<h1>{{ product.product_name }}</h1>
+<img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" style="width: 300px;">
+<p>Category: {{ product.get_product_category_display }}</p>
+<p>Description: {{ product.product_description }}</p>
+<p>Price: ₹{{ product.product_price }}</p>
+<p>Owner: {{ product.product_owner.username }}</p>
+<p>Created at: {{ product.created_at }}</p>
+<p>Last updated: {{ product.updated_at }}</p>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'cart_view' %}?add={{ product.id }}" class="btn btn-primary">Add to Cart</a>
+    <a href="{% url 'wishlist_view' %}?add={{ product.id }}" class="btn btn-secondary">Add to Wishlist</a>
+    <a href="{% url 'payment_view' %}?rent={{ product.id }}" class="btn btn-primary">Rent Now</a>
+</div>
