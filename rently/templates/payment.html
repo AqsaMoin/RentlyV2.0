@@ -1,0 +1,8 @@
+<h1>Payment for {{ product.product_name }}</h1>
+<img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" style="width: 200px;">
+<p>Price: ₹{{ product.product_price }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Proceed to Pay</button>
+</form>
